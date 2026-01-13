@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProjectDto } from './dto/projects.dto';
+import { UpdateProjectDto } from './dto/projects.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -29,5 +30,49 @@ export class ProjectsService {
     });
 
     return projects;
+  }
+
+  async updateProject(
+    projectId: number,
+    updateProjectDto: UpdateProjectDto,
+    ownerId: number,
+  ) {
+    const result = await this.prismaService.project.updateMany({
+      where: {
+        id: projectId,
+        ownerId,
+      },
+      data: updateProjectDto,
+    });
+
+    if (!result.count) {
+      throw new NotFoundException('Projeto não encontrado ou acesso negado');
+    }
+
+    return { message: 'Projeto atualizado com sucesso' };
+  }
+
+  async readProjects(ownerId: any) {
+    const projects = await this.prismaService.project.findMany({
+      where: { ownerId },
+    });
+
+    if (!projects) {
+      throw new NotFoundException('Projeto não encontrado ou acesso negado');
+    }
+
+    return projects;
+  }
+
+  async deleteProject(id: any, ownerId: any) {
+    const deletedProject = await this.prismaService.project.delete({
+      where: { id, ownerId },
+    });
+
+    if (!deletedProject) {
+      throw new NotFoundException('Projeto não encontrado ou acesso negado');
+    }
+
+    return { message: `Projeto ${deletedProject.name} deletado com sucesso!` };
   }
 }
