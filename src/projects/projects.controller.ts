@@ -24,7 +24,7 @@ export class ProjectsController {
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(JwtAuthGuard)
   async createProject(@Body() createProjectDto: CreateProjectDto, @Req() req) {
-    const ownerId = req.user.sub;
+    const ownerId = req.user.id;
     return this.projectsService.createProjects(createProjectDto, ownerId);
   }
 
@@ -32,7 +32,7 @@ export class ProjectsController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   async readProject(@Req() req) {
-    const ownerId = req.user.sub;
+    const ownerId = req.user.id;
     return this.projectsService.readProjects(ownerId);
   }
 
@@ -44,7 +44,7 @@ export class ProjectsController {
     @Body() updateProjectDto: UpdateProjectDto,
     @Req() req,
   ) {
-    const ownerId = req.user.sub;
+    const ownerId = req.user.id;
 
     return this.projectsService.updateProject(
       projectId,
@@ -60,7 +60,7 @@ export class ProjectsController {
     @Param('id', ParseIntPipe) projectId: number,
     @Req() req,
   ) {
-    const ownerId = req.user.sub;
+    const ownerId = req.user.id;
 
     return this.projectsService.deleteProject(projectId, ownerId);
   }
