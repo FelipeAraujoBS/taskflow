@@ -57,9 +57,33 @@ export class ProjectsService {
     return { message: 'Projeto atualizado com sucesso' };
   }
 
-  async readProjects(ownerId: any) {
+  async readProjects(userId: any) {
     const projects = await this.prismaService.project.findMany({
-      where: { ownerId },
+      where: {
+        OR: [
+          { ownerId: userId },
+          {
+            members: {
+              some: { userId: userId },
+            },
+          },
+        ],
+      },
+      include: {
+        owner: {
+          select: { id: true, name: true, email: true },
+        },
+        members: {
+          where: { userId },
+          select: { role: true },
+        },
+        _count: {
+          select: {
+            tasks: true,
+            members: true,
+          },
+        },
+      },
     });
 
     if (!projects) {

@@ -34,8 +34,8 @@ export class ProjectsController {
   @Get('find')
   @HttpCode(HttpStatus.OK)
   async readProject(@Req() req) {
-    const ownerId = req.user.id;
-    return this.projectsService.readProjects(ownerId);
+    const userId = req.user.id;
+    return this.projectsService.readProjects(userId);
   }
 
   @Put('update/:id')

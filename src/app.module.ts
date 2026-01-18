@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProjectsModule } from './projects/projects.module';
 import { LoginModule } from './login/login.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ProjectsMembersModule } from './projectsMembers/projectsMembers.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TasksModule } from './tasks/tasks.module';
     ProjectsModule,
     LoginModule,
     TasksModule,
+    ProjectsMembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
